@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
+import { img, workPhotos, journalPhotos } from "./data/photos.js";
 
 /* ------------------------------------------------------------------ */
 /* Data                                                                 */
@@ -17,44 +18,23 @@ const NAV = [
 
 const CATEGORIES = ["All", "Portraits", "Documentary", "Events", "Faith", "Commercial"];
 
-// Replace `src` with real photos. Seed numbers just keep placeholders stable.
-const WORK_ITEMS = [
-  { id: 1, category: "Portraits", title: "Amara, Studio Light", seed: 101, ratio: "portrait" },
-  { id: 2, category: "Documentary", title: "Morning Market, Lagos", seed: 102, ratio: "landscape" },
-  { id: 3, category: "Events", title: "The Adeyemi Wedding", seed: 103, ratio: "landscape" },
-  { id: 4, category: "Faith", title: "Sunday, First Light", seed: 104, ratio: "portrait" },
-  { id: 5, category: "Commercial", title: "Aso-Oke Textiles", seed: 105, ratio: "square" },
-  { id: 6, category: "Portraits", title: "David, Backstage", seed: 106, ratio: "portrait" },
-  { id: 7, category: "Documentary", title: "Fishermen, Badagry", seed: 107, ratio: "landscape" },
-  { id: 8, category: "Faith", title: "Baptism, River Road", seed: 108, ratio: "landscape" },
-  { id: 9, category: "Events", title: "Convocation Day", seed: 109, ratio: "square" },
-  { id: 10, category: "Commercial", title: "Néné Skincare Campaign", seed: 110, ratio: "portrait" },
-  { id: 11, category: "Portraits", title: "Chidi, Window Light", seed: 111, ratio: "square" },
-  { id: 12, category: "Documentary", title: "Bus Stop, Rainy Season", seed: 112, ratio: "landscape" },
-];
-
 const STORIES = [
   {
-    id: 1,
-    seed: 201,
+    id: "story-01",
     title: "Between Services",
     dek: "A year inside three churches preparing for Sunday, told through the hour before the doors open.",
   },
   {
-    id: 2,
-    seed: 202,
+    id: "story-02",
     title: "Okada",
     dek: "Portraits of Lagos motorcycle riders, shot at the stands where they wait between fares.",
   },
   {
-    id: 3,
-    seed: 203,
+    id: "story-03",
     title: "What the Market Keeps",
     dek: "Three generations of one family selling fabric at Balogun Market.",
   },
 ];
-
-const JOURNAL_SEEDS = Array.from({ length: 24 }, (_, i) => 300 + i);
 
 const SERVICES = [
   {
@@ -74,25 +54,6 @@ const SERVICES = [
     body: "Ongoing content strategy and shoot planning for brands and ministries.",
   },
 ];
-
-/* ------------------------------------------------------------------ */
-/* Helpers                                                              */
-/* ------------------------------------------------------------------ */
-
-function img() {
-  return "/images/Eli%20(78).jpg"
-}
-
-function ratioSize(ratio) {
-  switch (ratio) {
-    case "landscape":
-      return [1000, 700];
-    case "square":
-      return [800, 800];
-    default:
-      return [800, 1000];
-  }
-}
 
 /* ------------------------------------------------------------------ */
 /* Nav                                                                  */
@@ -157,9 +118,10 @@ function Nav({ active, onNavigate }) {
 /* ------------------------------------------------------------------ */
 
 function Home() {
+  const photo = img("hero");
   return (
     <section id="home" className="section hero">
-      <img className="hero-image" src={img(1, 1600, 2000)} alt="Featured photograph" />
+      <img className="hero-image" src={photo.src} alt={photo.alt} />
       <div className="hero-copy">
         <p className="eyebrow">GREATLENS</p>
         <h1>
@@ -181,7 +143,7 @@ function Work() {
   const [lightbox, setLightbox] = useState(null);
 
   const items =
-    filter === "All" ? WORK_ITEMS : WORK_ITEMS.filter((i) => i.category === filter);
+    filter === "All" ? workPhotos : workPhotos.filter((i) => i.category === filter);
 
   const openAt = (index) => setLightbox(index);
   const close = useCallback(() => setLightbox(null), []);
@@ -226,14 +188,14 @@ function Work() {
 
       <div className="work-grid">
         {items.map((item, i) => {
-          const [w, h] = ratioSize(item.ratio);
+          const photo = img(item.id);
           return (
             <button
               key={item.id}
               className={`work-item ratio-${item.ratio}`}
               onClick={() => openAt(i)}
             >
-              <img src={img(item.seed, w, h)} alt={item.title} loading="lazy" />
+              <img src={photo.src} alt={photo.alt} loading="lazy" />
               <span className="work-item-overlay">
                 <span className="work-item-title">{item.title}</span>
                 <span className="work-item-cat">{item.category}</span>
@@ -253,8 +215,8 @@ function Work() {
           </button>
           <figure>
             <img
-              src={img(items[lightbox].seed, 1400, 1750)}
-              alt={items[lightbox].title}
+              src={img(items[lightbox].id).src}
+              alt={img(items[lightbox].id).alt}
             />
             <figcaption>
               {items[lightbox].title} — {items[lightbox].category}
@@ -274,16 +236,19 @@ function Stories() {
     <section id="stories" className="section">
       <SectionHeading num="03" title="Stories" sub="Long-form photographic projects" />
       <div className="stories-list">
-        {STORIES.map((s) => (
-          <article className="story" key={s.id}>
-            <img src={img(s.seed, 1200, 800)} alt={s.title} loading="lazy" />
-            <div className="story-copy">
-              <h3>{s.title}</h3>
-              <p>{s.dek}</p>
-              <span className="story-link">Read the story</span>
-            </div>
-          </article>
-        ))}
+        {STORIES.map((s) => {
+          const photo = img(s.id);
+          return (
+            <article className="story" key={s.id}>
+              <img src={photo.src} alt={photo.alt} loading="lazy" />
+              <div className="story-copy">
+                <h3>{s.title}</h3>
+                <p>{s.dek}</p>
+                <span className="story-link">Read the story</span>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );
@@ -297,18 +262,22 @@ function Journal() {
         One frame at a time — a running log, not a highlight reel.
       </p>
       <div className="journal-grid">
-        {JOURNAL_SEEDS.map((seed) => (
-          <img key={seed} src={img(seed, 500, 500)} alt="" loading="lazy" />
-        ))}
+        {journalPhotos.map((item) => {
+          const photo = img(item.id);
+          return (
+            <img key={photo.id} src={photo.src} alt={photo.alt} loading="lazy" />
+          );
+        })}
       </div>
     </section>
   );
 }
 
 function About() {
+  const photo = img("about");
   return (
     <section id="about" className="section about">
-      <img className="about-portrait" src="/images/ppoe.jpg" alt="Portrait of the photographer" />
+      <img className="about-portrait" src={photo.src} alt={photo.alt} />
       <div className="about-copy">
         <SectionHeading num="05" title="About" sub="Your story + GREATLENS philosophy" />
         <p>
