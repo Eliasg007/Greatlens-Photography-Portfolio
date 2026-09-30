@@ -725,10 +725,33 @@ a:focus-visible {
 
 .socials {
   display: flex;
-  gap: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .socials a {
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.socials svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.socials svg path,
+.socials .social-icon-dot {
+  fill: currentColor;
+  stroke: none;
   color: var(--muted);
   font-size: 0.85rem;
 }

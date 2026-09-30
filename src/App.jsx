@@ -550,8 +550,18 @@ function Contact() {
       <div className="contact-direct">
         <a href="mailto:greatlensphotos@gmail.com">greatlensphotos@gmail.com</a>
         <div className="socials">
-          <a href="https://www.instagram.com/_greatlens/" aria-label="Instagram">Instagram</a>
-          <a href="https://www.tiktok.com/@elijahgegeli" aria-label="TikTok">TikTok</a>
+          <a href="https://www.instagram.com/_greatlens/" aria-label="Instagram" title="Instagram" target="_blank" rel="noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle className="social-icon-dot" cx="17.5" cy="6.5" r="1" />
+            </svg>
+          </a>
+          <a href="https://www.tiktok.com/@elijahgegeli" aria-label="TikTok" title="TikTok" target="_blank" rel="noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M15 3h3c.2 2.1 1.5 3.8 3.5 4.5v3.2a9 9 0 0 1-3.5-1.3v6.2a6 6 0 1 1-6-6c.4 0 .7 0 1 .1v3.3a2.8 2.8 0 1 0 1.9 2.6V3Z" />
+            </svg>
+          </a>
         </div>
       </div>
     </section>
